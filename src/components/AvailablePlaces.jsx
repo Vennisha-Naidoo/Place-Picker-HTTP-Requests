@@ -3,14 +3,17 @@ import Places from './Places.jsx';
 
 export default function AvailablePlaces({ onSelectPlace }) {
 
+  const [isFetching, setIsFetching] = useState(false);
   const [availablePlaces, setAvailablePlaces] = useState([]);
 
   useEffect(() => {
 
     async function fetchPlaces() {
+      setIsFetching(true);
       const response = await fetch("http://localhost:3000/places");
       const resultData = await response.json();
       setAvailablePlaces(resultData.places);
+      setIsFetching(false);
     }
 
     fetchPlaces();
@@ -19,6 +22,8 @@ export default function AvailablePlaces({ onSelectPlace }) {
   return (
     <Places
       title="Available Places"
+      isLoading={ isFetching }
+      loadingText="Fetching places data..."
       places={availablePlaces}
       fallbackText="No places available."
       onSelectPlace={onSelectPlace}
